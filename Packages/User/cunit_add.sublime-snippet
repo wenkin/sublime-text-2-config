@@ -1,0 +1,86 @@
+<snippet>
+	<content><![CDATA[
+
+
+#include "fun.h"
+#include <CUnit/CUnit.h>
+
+
+
+int InitSuite()
+{
+	return 0;
+} 
+
+int EndSuite()
+{
+	return 0;
+}
+
+
+/*0 表示成功，1表示失败*/
+int AddTestMainModule()
+{
+	CU_pSuite pSuite = NULL;
+
+	/***************
+	* 1. CU_add_suite 增加一个Suite 
+	* 2. Suite名字 : testSuite
+	* 3. InitSuite EndSuite：分别是测试单元初始和释放函数，如不需要则NULL传递
+	****************/
+	pSuite = CU_add_suite("testSuite", InitSuite, EndSuite);  
+
+	//检测注册Suite情况
+	if(NULL == pSuite)
+	{
+		//return 1;
+	}
+	
+	/***************
+	* 1. 注册当前Suite下的测试用例　
+	* 2. pSuite：用例指针
+	* 3. "Test1"： 测试单元名称 
+	* 4. Test1：测试函数
+	***************/
+	// if( NULL == CU_add_test(pSuite, "Test1", test_all_0) ||
+	// 	NULL == CU_add_test(pSuite, "Test2", test_all_1) ||
+	// 	NULL == CU_add_test(pSuite, "Test3", test_spare) ||
+	// 	NULL == CU_add_test(pSuite, "Test4", test_strike) ||
+	// 	NULL == CU_add_test(pSuite, "Test5", test_perfect)
+	// 	)
+	// {
+	// 	return 1;
+	// }
+	
+	/***另外一种测试方式***************/
+	
+	CU_TestInfo testcases[] = {
+        {"Test1:", test_all_0},
+        {"Test2:", test_all_1},
+        {"Test3:", test_spare},
+        {"Test4:", test_strike},
+        {"Test5:", test_perfect},
+        CU_TEST_INFO_NULL
+	};
+
+	CU_SuiteInfo suites[] = {
+		{"test getScore:", InitSuite, EndSuite, testcases},
+        CU_SUITE_INFO_NULL
+	};
+
+	if(CUE_SUCCESS != CU_register_suites(suites))
+	{
+		return 1;
+	}
+	
+	/************************************/
+
+	return 0;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>cunit_add</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c</scope>
+</snippet>

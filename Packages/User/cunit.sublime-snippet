@@ -1,0 +1,58 @@
+<snippet>
+	<content><![CDATA[
+#include <stdio.h>
+#include <assert.h>
+#include <CUnit/Console.h>
+#include <CUnit/Basic.h>
+#include <CUnit/TestDB.h>
+#include <CUnit/CUnit.h>
+
+extern int AddTestMainModule();
+
+int main()
+{
+   
+	//CU_initialize_registry 注册函数注册一个用例返回CUE_系列异常值
+	if( CUE_SUCCESS != CU_initialize_registry())
+	{
+		return CU_get_error();
+	}
+
+	//CU_get_registry 返回注册到用例指针 
+	assert(NULL != CU_get_registry());
+
+	//检测是否在执行 
+	assert(!CU_is_test_running()); 
+
+	//调用测试模块完成测试用例
+	if (0 != AddTestMainModule())
+	{
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+
+	/**** Automated Mode *****************/
+	CU_set_output_filename("TestMax");
+	CU_list_tests_to_file();
+	CU_automated_run_tests();
+
+	/***** Basice Mode *******************/
+	// CU_basic_set_mode(CU_BRM_VERBOSE);
+	// CU_basic_run_tests();
+
+	/*****Console Mode ********************/
+	// CU_console_run_tests();
+
+	//调用完毕清除注册信息 
+	CU_cleanup_registry();
+	
+	return 0;
+}
+	
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>cunit_run</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c</scope>
+</snippet>
